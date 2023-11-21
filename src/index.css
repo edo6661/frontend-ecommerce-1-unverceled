@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input {
+	color: black;
+}
+
+@layer base {
+	:root {
+		--main-bg-color: rgba(255, 255, 255, 0.24);
+		--hover-main-bg-color: rgba(255, 255, 255, 0.34);
+		--hover-main-shadow-color: 0 4px 30px rgba(0, 0, 0, 0.1);
+	}
+	#root {
+		background-image: url('https://img.freepik.com/free-vector/wave-background-abstract-gradient-design_483537-3688.jpg');
+		@apply bg-no-repeat bg-cover py-4 sm:px-12 px-2;
+	}
+	body {
+		font-family: 'Poppins', sans-serif;
+		@apply overflow-x-hidden;
+	}
+	nav {
+		font-family: 'montserrat', serif;
+	}
+	input,
+	textarea,
+	select,
+	option {
+		color: black;
+	}
+	input[type='text'],
+	input[type='password'],
+	input[type='email'],
+	input[type='number'],
+	textarea {
+		@apply outline-none border-slate-500 border placeholder:italic primaryColor text-white py-3 pl-3 shadow-sm shadow-slate-500;
+	}
+	h3 {
+		@apply font-semibold text-xl mb-1;
+	}
+	.btn {
+		@apply py-2 px-3 rounded dark:text-white text-black disabled:opacity-60 disabled:cursor-not-allowed;
+	}
+	.btn:hover {
+		@apply bg-indigo-700 transition-all shadow-md;
+	}
+	.primaryColor {
+		@apply shadow-sm shadow-slate-800;
+		background: var(--main-bg-color);
+	}
+	.primaryColor-no-hover {
+		background: var(--main-bg-color);
+	}
+	.primaryColor:hover {
+		background: var(--hover-main-bg-color);
+		box-shadow: var(--hover-main-shadow-color);
+	}
+	.primaryColor:disabled:hover {
+		background: var(--main-bg-color);
+	}
+	.container-products {
+		@apply grid gap-x-10 gap-y-8 mt-10;
+		grid-template-columns: repeat(auto-fit, minmax(224px, 1fr));
+	}
+	.singleProductIcon {
+		@apply absolute inset-0 -left-6 top-1;
+	}
+	/* ! hover product images */
+	.glow-effect {
+		--glow-line-color: #c0c2c9;
+		--glow-line-thickness: 2px;
+		--glow-line-length: 20px;
+		--glow-blur-color: #c0c2c9;
+		--glow-blur-size: 5px;
+		--glow-offset: 0px;
+		--animation-speed: 1200ms;
+		/* do not change, used for calculations */
+		--container-offset: 100px;
+		position: relative;
+		@apply rounded-full;
+	}
+
+	.glow-container {
+		pointer-events: none;
+		position: absolute;
+		inset: calc(var(--container-offset) / -2);
+		width: calc(100% + var(--container-offset));
+		height: calc(100% + var(--container-offset));
+		opacity: 0;
+		/* outline: 3px solid blue; */
+		@apply rounded-full;
+	}
+
+	.glow-blur,
+	.glow-line {
+		width: calc(100% - var(--container-offset) + var(--glow-offset));
+		height: calc(100% - var(--container-offset) + var(--glow-offset));
+		x: calc((var(--container-offset) / 2) + calc(var(--glow-offset) / -2));
+		y: calc((var(--container-offset) / 2) + calc(var(--glow-offset) / -2));
+		/* rx: 1.25rem; */
+		fill: transparent;
+		stroke: black;
+		stroke-width: 5px;
+		stroke-dasharray: var(--glow-line-length)
+			calc(50px - var(--glow-line-length));
+	}
+
+	.glow-effect:is(:hover, :focus) :is(.glow-line, .glow-blur) {
+		stroke-dashoffset: -80px;
+		transition: stroke-dashoffset var(--animation-speed) ease-in;
+	}
+
+	.glow-line {
+		stroke: var(--glow-line-color);
+		stroke-width: var(--glow-line-thickness);
+	}
+
+	.glow-blur {
+		filter: blur(var(--glow-blur-size));
+		stroke: var(--glow-blur-color);
+		stroke-width: var(--glow-blur-size);
+	}
+
+	.glow-effect:is(:hover, :focus) .glow-container {
+		animation: glow-visibility ease-in-out infinite var(--animation-speed);
+	}
+
+	@keyframes glow-visibility {
+		0%,
+		100% {
+			opacity: 100%;
+		}
+	}
+
+	.glow-effect[data-glow-animation='false'] {
+		--glow-line-length: 50px;
+	}
+	.glow-effect[data-glow-offset='true'] {
+		--glow-offset: 10px;
+	}
+
+	.glow-effect[data-glow-animation='grow']:is(:hover, :focus) .glow-container {
+		scale: 1.3;
+		transition: scale var(--animation-speed) linear;
+	}
+	/* ! slider */
+	.scroller {
+		mask: linear-gradient(
+			90deg,
+			transparent,
+			white 30%,
+			white 80%,
+			transparent
+		);
+	}
+	.scroller__inner {
+		@apply flex gap-6;
+		animation: scroller var(--scroller-speed, 40s)
+			var(--scroller-direction, forwards) linear infinite;
+	}
+	.slider__image {
+		@apply block sm:w-36 w-32 object-cover grayscale;
+	}
+	@keyframes scroller {
+		to {
+			transform: translate(calc(-100% - 1rem));
+		}
+	}
+	.scroller[data-direction='right'] {
+		--_animation-direction: reverse;
+	}
+	.scroller[data-speed='fast'] {
+		--scroller-speed: 15s;
+	}
+}
